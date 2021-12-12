@@ -1,7 +1,8 @@
-#include<iostream>
+#include <iostream>
 
 using namespace std;
 
+//BSTree
 template <typename T>
 class treeNode
 {
@@ -16,54 +17,55 @@ public:
         parentNode = parent;
         data = input;
     }
-    // ~treeNode()
-    // {
-    //     //destroyNode();
-    // }
 
     void printNode()
     {
-        cout << data;
-        cout << "(";
+        printf("%d(", data);
         if (nextNode[0] != nullptr)
         {
             nextNode[0]->printNode();
         }
-        cout << ")(";
+        printf(")(");
         if (nextNode[1] != nullptr)
         {
             nextNode[1]->printNode();
         }
-        cout << ")";
+        //cout << ")";
+        printf(")");
     }
 
-    void add(T input)
+    void add(T inputData)
     {
-        if (input <= data)
+        treeNode *preNode = this;
+        treeNode *lastNode = this;
+
+        //find the last node
+        while (lastNode != nullptr)
         {
-            if (nextNode[0] == nullptr)
+            if (inputData <= preNode->data)
             {
-                treeNode *newNode = new treeNode(this, input);
-                nextNode[0] = newNode;
+                lastNode = preNode->nextNode[0];
             }
             else
             {
-                nextNode[0]->add(input);
+                lastNode = preNode->nextNode[1];
             }
-            return;
+            if (lastNode == nullptr)
+            {
+                break;
+            }
+            else
+            {
+                preNode = lastNode;
+            }
         }
-        if (input > data)
+        if (inputData <= preNode->data)
         {
-            if (nextNode[1] == nullptr)
-            {
-                treeNode *newNode = new treeNode(this, input);
-                nextNode[1] = newNode;
-                return;
-            }
-            else
-            {
-                nextNode[1]->add(input);
-            }
+            preNode->nextNode[0] = new treeNode(preNode, inputData);
+        }
+        else
+        {
+            preNode->nextNode[1] = new treeNode(preNode, inputData);
         }
     }
 
@@ -131,50 +133,56 @@ public:
 
     treeNode *findParent(T searchData)
     {
-        if (searchData <= data)
+        treeNode *tempNode = this;
+        while (tempNode != nullptr)
         {
-            if (nextNode[0] != nullptr)
+            if (searchData <= tempNode->data)
             {
-                if (nextNode[0]->data == searchData)
+                if (tempNode->nextNode[0] != nullptr)
                 {
-                    return this;
+                    if (tempNode->nextNode[0]->data == searchData)
+                    {
+                        return tempNode;
+                    }
+                    else
+                    {
+                        tempNode = tempNode->nextNode[0];
+                    }
                 }
                 else
                 {
-                    return nextNode[0]->findParent(searchData);
+                    return nullptr;
                 }
             }
             else
             {
-                return nullptr;
-            }
-        }
-        else
-        {
-            if (nextNode[1] != nullptr)
-            {
-                if (nextNode[1]->data == searchData)
+                if (tempNode->nextNode[1] != nullptr)
                 {
-                    return this;
+                    if (tempNode->nextNode[1]->data == searchData)
+                    {
+                        return tempNode;
+                    }
+                    else
+                    {
+                        tempNode = tempNode->nextNode[1];
+                    }
                 }
                 else
                 {
-                    return nextNode[1]->findParent(searchData);
+                    return nullptr;
                 }
-            }
-            else
-            {
-                return nullptr;
             }
         }
     }
+
     treeNode *findRightLeaf()
     {
-        if (nextNode[1]->nextNode[1] == nullptr)
+        treeNode *tempNode = this;
+        while (tempNode->nextNode[1]->nextNode[1] != nullptr)
         {
-            return this;
+            tempNode = tempNode->nextNode[1];
         }
-        return nextNode[1]->findRightLeaf();
+        return tempNode;
     }
 
     void destroyNode()
@@ -217,7 +225,7 @@ public:
         }
     }
 
-    void print()
+    void Print()
     {
         if (treeRoot != nullptr)
         {
@@ -226,7 +234,7 @@ public:
         cout << endl;
     }
 
-    void remove(T deleteData)
+    void Remove(T deleteData)
     {
         if (treeRoot == nullptr)
             return;
