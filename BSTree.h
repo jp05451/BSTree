@@ -253,5 +253,4 @@ public:
 
 private:
     NODE *treeRoot = nullptr;
-    T nodeList[MAX];
 };
