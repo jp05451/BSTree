@@ -1,8 +1,6 @@
-#include <iostream>
+#include <stdio.h>
 
-using namespace std;
-
-//BSTree
+// BSTree
 template <typename T>
 class treeNode
 {
@@ -39,7 +37,7 @@ public:
         treeNode *preNode = this;
         treeNode *lastNode = this;
 
-        //find the last node
+        // find the last node
         while (lastNode != nullptr)
         {
             if (inputData <= preNode->data)
@@ -74,7 +72,7 @@ public:
         int remove;
         treeNode *deleteNode;
 
-        //find the deleteNode
+        // find the deleteNode
         if (deleteData <= data)
         {
             remove = 0;
@@ -86,25 +84,25 @@ public:
             deleteNode = nextNode[1];
         }
 
-        //delete Node
+        // delete Node
         if (deleteNode->nextNode[0] == nullptr && deleteNode->nextNode[1] == nullptr)
-        //have no child node
+        // have no child node
         {
             delete deleteNode;
             nextNode[remove] = nullptr;
             return;
         }
         else if (deleteNode->nextNode[0] != nullptr && deleteNode->nextNode[1] != nullptr)
-        //have two child node
+        // have two child node
         {
             if (deleteNode->nextNode[0]->nextNode[1] == nullptr)
-            //don't have left child's right child
+            // don't have left child's right child
             {
                 deleteNode->data = deleteNode->nextNode[0]->data;
                 deleteNode->removeNode(deleteNode->data);
             }
             else
-            //have left child's right child
+            // have left child's right child
             {
                 treeNode *finalNode = deleteNode->nextNode[0]->findRightLeaf();
                 deleteNode->data = finalNode->nextNode[1]->data;
@@ -116,14 +114,14 @@ public:
         // only have one child
         {
             if (deleteNode->nextNode[0] != nullptr)
-            //have left child
+            // have left child
             {
-                //deletNode->data = deletNode->nextNode[0]->data;
+                // deletNode->data = deletNode->nextNode[0]->data;
                 nextNode[remove] = deleteNode->nextNode[0];
                 // deleteNode->removeNode(deleteNode->nextNode[0]->data);
             }
             else
-            //have right child
+            // have right child
             {
                 nextNode[remove] = deleteNode->nextNode[1];
             }
@@ -196,7 +194,7 @@ public:
                     nextNode[i]->destroyNode();
                 }
                 if (nextNode[i]->nextNode[0] == nullptr && nextNode[i]->nextNode[1] == nullptr)
-                //last Node of the tree
+                // last Node of the tree
                 {
                     delete nextNode[i];
                     nextNode[i] = nullptr;
